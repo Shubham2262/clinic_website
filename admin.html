@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Clinic Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>body{font-family:Inter,system-ui,Arial,sans-serif}</style>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-6xl mx-auto p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold">Clinic Admin</h1>
+      <div>
+        <input id="adminKey" type="password" placeholder="Admin key" class="px-3 py-2 border rounded mr-2">
+        <button id="btnLoad" class="bg-blue-600 text-white px-4 py-2 rounded">Load Bookings</button>
+      </div>
+    </div>
+
+    <div id="alerts"></div>
+
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold mb-4">Bookings</h2>
+      <div id="bookings" class="space-y-4"></div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold mb-4">Create Content (admin only)</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Add Service</h4>
+          <input id="svcTitle" placeholder="Title" class="w-full mb-2 px-3 py-2 border rounded">
+          <input id="svcDesc" placeholder="Description" class="w-full mb-2 px-3 py-2 border rounded">
+          <input id="svcIcon" placeholder="Icon class (e.g. fas fa-procedures)" class="w-full mb-2 px-3 py-2 border rounded">
+          <label class="inline-flex items-center mt-2"><input id="svcPublish" type="checkbox" class="mr-2"> Publish</label>
+          <button id="addService" class="bg-green-600 text-white px-3 py-2 rounded mt-3">Add Service</button>
+        </div>
+
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Add Blog</h4>
+          <input id="blogTitle" placeholder="Title" class="w-full mb-2 px-3 py-2 border rounded">
+          <input id="blogImage" placeholder="Image URL" class="w-full mb-2 px-3 py-2 border rounded">
+          <textarea id="blogContent" placeholder="Content" class="w-full mb-2 px-3 py-2 border rounded"></textarea>
+          <label class="inline-flex items-center"><input id="blogPublish" type="checkbox" class="mr-2"> Publish</label>
+          <button id="addBlog" class="bg-indigo-600 text-white px-3 py-2 rounded mt-3">Add Blog</button>
+        </div>
+
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Add Testimonial</h4>
+          <input id="testName" placeholder="Name" class="w-full mb-2 px-3 py-2 border rounded">
+          <input id="testImage" placeholder="Image URL" class="w-full mb-2 px-3 py-2 border rounded">
+          <textarea id="testText" placeholder="Testimonial" class="w-full mb-2 px-3 py-2 border rounded"></textarea>
+          <label class="inline-flex items-center"><input id="testPublish" type="checkbox" class="mr-2"> Publish</label>
+          <button id="addTest" class="bg-purple-600 text-white px-3 py-2 rounded mt-3">Add Testimonial</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="text-sm text-gray-600">Admin actions use header <code>x-admin-key</code>. Keep it secret.</div>
+  </div>
+
+<script>
+const API_PREFIX = '';
+function getKey() { return document.getElementById('adminKey').value.trim(); }
+function showAlert(msg, type='green') {
+  const a = document.createElement('div');
+  a.className = `mb-4 p-3 rounded ${type==='green'?'bg-green-100 text-green-800':'bg-red-100 text-red-800'}`;
+  a.textContent = msg;
+  document.getElementById('alerts').appendChild(a);
+  setTimeout(()=> a.remove(), 6000);
+}
+async function apiGet(path) {
+  const key = getKey();
+  const res = await fetch(path, { headers: key ? { 'x-admin-key': key } : {} });
+  if (!res.ok) { const j = await res.json().catch(()=>({})); throw new Error(j.error || res.statusText); }
+  return res.json();
+}
+async function apiPost(path, body) {
+  const key = getKey();
+  const headers = Object.assign({'Content-Type':'application/json'}, key?{'x-admin-key':key}:{});
+  const res = await fetch(path, { method:'POST', headers, body: JSON.stringify(body) });
+  const j = await res.json().catch(()=> ({}));
+  if (!res.ok) throw new Error(j.error || res.statusText || JSON.stringify(j));
+  return j;
+}
+
+// Load bookings and render
+async function loadBookings() {
+  try {
+    const items = await apiGet('/api/bookings');
+    const container = document.getElementById('bookings');
+    container.innerHTML = '';
+    if (!items.length) { container.innerHTML = '<div class="p-4 bg-white rounded shadow">No bookings</div>'; return; }
+    items.forEach(b => {
+      const card = document.createElement('div');
+      card.className = 'p-4 bg-white rounded shadow flex justify-between items-start';
+      // show patient details and booking notes
+      card.innerHTML = `
+        <div>
+          <div class="font-semibold">${escapeHtml(b.name)} <span class="text-xs text-gray-500">(${escapeHtml(b.contact)})</span></div>
+          <div class="text-sm text-gray-600 mt-1">Email: ${escapeHtml(b.email || 'N/A')} | Phone: ${escapeHtml(b.phone || 'N/A')}</div>
+          <div class="text-sm mt-2">Service: <strong>${escapeHtml(b.service || 'N/A')}</strong></div>
+          <div class="text-sm mt-1">Date: <strong>${b.dateISO}</strong> | Slot: <strong>${b.slot}</strong></div>
+          <div class="text-sm mt-2">Notes: ${escapeHtml(b.notes || 'N/A')}</div>
+          <div class="text-sm mt-2">Status: <span class="font-medium">${b.status}</span></div>
+          <div class="text-xs mt-2 text-gray-500">Created: ${new Date(b.createdAt).toLocaleString()}</div>
+        </div>
+        <div class="space-y-2 text-right">
+          <!-- show buttons only for pending bookings -->
+          ${b.status === 'pending' ? `<button class="confirmBtn bg-green-600 text-white px-3 py-1 rounded" data-id="${b._id}"><i class="fas fa-check mr-1"></i>Confirm</button>
+          <button class="cancelBtn bg-yellow-500 text-white px-3 py-1 rounded" data-id="${b._id}"><i class="fas fa-times mr-1"></i>Cancel</button>` : ''}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+    document.querySelectorAll('.confirmBtn').forEach(btn => btn.addEventListener('click', handleConfirm));
+    document.querySelectorAll('.cancelBtn').forEach(btn => btn.addEventListener('click', handleCancel));
+  } catch (err) {
+    showAlert('Load bookings failed: ' + err.message, 'red');
+  }
+}
+
+async function handleConfirm(ev) {
+  const id = ev.currentTarget.dataset.id;
+  if (!confirm('Confirm this booking?')) return;
+  try {
+    const res = await apiPost(`/api/bookings/${id}/status`, { status:'confirmed' });
+    showAlert('Booking confirmed. Email sent? ' + (res.emailSent ? 'Yes' : 'No (see console)'), 'green');
+    loadBookings();
+  } catch (err) { showAlert('Confirm failed: ' + err.message, 'red'); }
+}
+
+async function handleCancel(ev) {
+  const id = ev.currentTarget.dataset.id;
+  if (!confirm('Cancel this booking?')) return;
+  try {
+    const res = await apiPost(`/api/bookings/${id}/status`, { status:'cancelled' });
+    showAlert('Booking cancelled', 'green');
+    loadBookings();
+  } catch (err) { showAlert('Cancel failed: ' + err.message, 'red'); }
+}
+
+// Content creation handlers with publish option
+document.getElementById('addService').addEventListener('click', async () => {
+  try {
+    const title = document.getElementById('svcTitle').value.trim();
+    const desc = document.getElementById('svcDesc').value.trim();
+    const icon = document.getElementById('svcIcon').value.trim();
+    const published = document.getElementById('svcPublish').checked;
+    if(!title) return showAlert('Service title required', 'red');
+    await apiPost('/api/services', { title, description: desc, icon, published });
+    showAlert('Service added', 'green');
+    document.getElementById('svcTitle').value=''; document.getElementById('svcDesc').value=''; document.getElementById('svcIcon').value=''; document.getElementById('svcPublish').checked=false;
+  } catch (err) { showAlert('Add service failed: ' + err.message, 'red'); }
+});
+
+document.getElementById('addBlog').addEventListener('click', async () => {
+  try {
+    const title = document.getElementById('blogTitle').value.trim();
+    const content = document.getElementById('blogContent').value.trim();
+    const image = document.getElementById('blogImage').value.trim();
+    const published = document.getElementById('blogPublish').checked;
+    if(!title || !content) return showAlert('Blog title and content required', 'red');
+    await apiPost('/api/blogs', { title, content, summary: content.slice(0,200), image, published });
+    showAlert('Blog added', 'green');
+    document.getElementById('blogTitle').value=''; document.getElementById('blogContent').value=''; document.getElementById('blogImage').value=''; document.getElementById('blogPublish').checked=false;
+  } catch (err) { showAlert('Add blog failed: ' + err.message, 'red'); }
+});
+
+document.getElementById('addTest').addEventListener('click', async () => {
+  try {
+    const name = document.getElementById('testName').value.trim();
+    const text = document.getElementById('testText').value.trim();
+    const image = document.getElementById('testImage').value.trim();
+    const published = document.getElementById('testPublish').checked;
+    if(!name || !text) return showAlert('Testimonial name and text required', 'red');
+    await apiPost('/api/testimonials', { name, text, image, rating:5, published });
+    showAlert('Testimonial added', 'green');
+    document.getElementById('testName').value=''; document.getElementById('testText').value=''; document.getElementById('testImage').value=''; document.getElementById('testPublish').checked=false;
+  } catch (err) { showAlert('Add testimonial failed: ' + err.message, 'red'); }
+});
+
+document.getElementById('btnLoad').addEventListener('click', loadBookings);
+
+function escapeHtml(s){ if(!s) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+// Auto-fill admin key if provided as query param
+(function autoLoadFromQuery(){
+  const url = new URL(location.href);
+  const k = url.searchParams.get('adminKey');
+  if(k) { document.getElementById('adminKey').value = k; setTimeout(()=> document.getElementById('btnLoad').click(), 200); }
+})();
+
+
+</script>
+<div id="testimonials-list"></div>
+
+<script>
+async function loadTestimonials() {
+  const res = await fetch('/api/testimonials');
+  const testimonials = await res.json();
+  const container = document.getElementById('testimonials-list');
+  container.innerHTML = '';
+
+  testimonials.forEach(t => {
+    const div = document.createElement('div');
+    div.className = "p-4 border rounded mb-3";
+    div.innerHTML = `
+      <p><strong>${t.name}</strong></p>
+      <p>${t.text}</p>
+      <button onclick="deleteTestimonial('${t._id}')" 
+              class="bg-red-600 text-white px-3 py-1 mt-2 rounded">Delete</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+async function deleteTestimonial(id) {
+  if (!confirm("Are you sure you want to delete this testimonial?")) return;
+  const res = await fetch('/api/testimonials/' + id, { method: 'DELETE' });
+  if (res.ok) {
+    alert("Deleted successfully");
+    loadTestimonials();
+  } else {
+    alert("Failed to delete");
+  }
+}
+
+loadTestimonials();
+</script>
+</body>
+</html>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AAYUSH Surgical Clinic - Dr. Shriram Dahatonde</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Swiper slider -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            font-size: 28px;
+        }
+        
+        .slot {
+            transition: all 0.15s ease;
+        }
+        
+        .slot:hover {
+            transform: scale(1.03);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: #0d9668;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center">
+                    <div class="h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-xl font-bold text-gray-900">AAYUSH Surgical Clinic</div>
+                        <div class="text-sm text-gray-600">Dr. Shriram T. Dahatonde</div>
+                    </div>
+                </div>
+                <div class="hidden md:flex md:space-x-8 items-center">
+                    <a href="#home" class="nav-link text-gray-900 font-medium">Home</a>
+                    <a href="#about" class="nav-link text-gray-600 font-medium">About</a>
+                    <a href="#services" class="nav-link text-gray-600 font-medium">Services</a>
+                    <a href="#panchakarma" class="nav-link text-gray-600 font-medium">Panchakarma</a>
+                    <a href="#testimonials" class="nav-link text-gray-600 font-medium">Testimonials</a>
+                    <a href="#booking" class="nav-link text-gray-600 font-medium">Book Appointment</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/admin" class="hidden md:inline-flex items-center bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+                        <i class="fas fa-user-shield mr-2"></i> Admin
+                    </a>
+                    <a href="tel:+919960995809" class="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">
+                        <i class="fas fa-phone-alt mr-2"></i> Call Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-24 hero-gradient text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Expert Surgical & Panchakarma Care</h1>
+                    <p class="text-xl mb-8 opacity-90">Dr. Shriram T. Dahatonde - MS (General Surgery AYU.), Consultant Proctologist & Anorectal Surgeon</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#booking" class="btn-primary text-white px-8 py-3 rounded-lg text-lg font-semibold text-center shadow-lg">
+                            <i class="fas fa-calendar-check mr-2"></i> Book Appointment
+                        </a>
+                        <a href="#services" class="bg-white text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold text-center shadow-lg hover:bg-gray-100 transition">
+                            <i class="fas fa-procedures mr-2"></i> Our Services
+                        </a>
+                    </div>
+                    <div class="mt-8 flex items-center">
+                        <div class="mr-6">
+                            <div class="text-2xl font-bold">15+</div>
+                            <div class="text-sm opacity-80">Years Experience</div>
+                        </div>
+                        <div class="mr-6">
+                            <div class="text-2xl font-bold">5000+</div>
+                            <div class="text-sm opacity-80">Happy Patients</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold">98%</div>
+                            <div class="text-sm opacity-80">Success Rate</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1584438784890-7c3d3bd38962?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Dr. Shriram Dahatonde" class="rounded-xl shadow-2xl w-full h-96 object-cover">
+                    <div class="absolute -bottom-6 -left-6 bg-white text-gray-800 p-4 rounded-xl shadow-lg">
+                        <div class="font-bold">Clinic Timings</div>
+                        <div class="text-sm">Mon-Sat: 9am-2pm & 5pm-10pm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">About Dr. Shriram T. Dahatonde</h2>
+                <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Doctor with patient" class="rounded-xl shadow-lg w-full h-96 object-cover">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4">MS (General Surgery AYU.), Consultant Proctologist & Anorectal Surgeon</h3>
+                    <p class="text-gray-700 mb-6">With over 15 years of experience, Dr. Shriram T. Dahatonde specializes in advanced surgical treatments with a focus on proctology and anorectal conditions. His expertise combines modern surgical techniques with traditional Ayurvedic principles for comprehensive patient care.</p>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-graduation-cap text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold">Medical Education</div>
+                                <div class="text-gray-600">MS in General Surgery (AYU.) with specialization in Proctology</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-award text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold">Specializations</div>
+                                <div class="text-gray-600">Piles, Fissures, Fistulas, Pilonidal Sinus, Laser & Minimally Invasive Surgery</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-blue-600 mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold">Clinic Location</div>
+                                <div class="text-gray-600">Manikpur Chowk, Near Manickpur Talao, Manickpur, Vasai West - 401202</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <a href="tel:+919960995809" class="inline-flex items-center bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition mr-4">
+                            <i class="fas fa-phone-alt mr-2"></i> +91 99609 95809
+                        </a>
+                        <a href="mailto:shriramdahatonde@gmail.com" class="inline-flex items-center bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition">
+                            <i class="fas fa-envelope mr-2"></i> Email Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Specialized Services</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">We offer comprehensive surgical treatments with a focus on minimally invasive techniques for faster recovery and better outcomes.</p>
+                <div class="w-20 h-1 bg-blue-600 mx-auto mt-4"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="service-icon bg-blue-100 text-blue-600">
+                            <i class="fas fa-procedures"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Piles (Hemorrhoids)</h3>
+                        <p class="text-gray-600 mb-4">Advanced treatment for hemorrhoids including laser procedures for minimal discomfort and quick recovery.</p>
+                        <ul class="text-gray-600 space-y-2">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Laser treatment options</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Minimal pain & discomfort</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Same-day procedures</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="service-icon bg-green-100 text-green-600">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Fissures & Fistulas</h3>
+                        <p class="text-gray-600 mb-4">Comprehensive care for anal fissures and fistulas with advanced surgical techniques for permanent relief.</p>
+                        <ul class="text-gray-600 space-y-2">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Advanced diagnostic methods</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Laser fistula treatment</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Personalized care plans</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="service-icon bg-purple-100 text-purple-600">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Pilonidal Sinus</h3>
+                        <p class="text-gray-600 mb-4">Effective treatment for pilonidal sinus with minimal recurrence rates and focus on complete healing.</p>
+                        <ul class="text-gray-600 space-y-2">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Minimally invasive techniques</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Reduced recurrence rates</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Comprehensive aftercare</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Service 4 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="service-icon bg-red-100 text-red-600">
+                            <i class="fas fa-laser"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Laser Surgery</h3>
+                        <p class="text-gray-600 mb-4">State-of-the-art laser treatments for various conditions ensuring precision and faster recovery.</p>
+                        <ul class="text-gray-600 space-y-2">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Precision treatment</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Minimal blood loss</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Quick recovery time</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Service 5 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="service-icon bg-yellow-100 text-yellow-600">
+                            <i class="fas fa-hand-holding-medical"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Minimally Invasive Surgery</h3>
+                        <p class="text-gray-600 mb-4">Advanced keyhole procedures that reduce trauma, pain, and recovery time for patients.</p>
+                        <ul class="text-gray-600 space-y-2">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Smaller incisions</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Reduced scarring</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Shorter hospital stays</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Service 6 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="p-6">
+                        <div class="service-icon bg-indigo-100 text-indigo-600">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">General Surgery</h3>
+                        <p class="text-gray-600 mb-4">Comprehensive surgical care for various conditions with personalized treatment approaches.</p>
+                        <ul class="text-gray-600 space-y-2">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Wide range of procedures</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Experienced surgical team</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i> Patient-centered care</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Panchakarma Section -->
+    <section id="panchakarma" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Panchakarma Therapies</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Traditional Ayurvedic detoxification and rejuvenation therapies for holistic wellness.</p>
+                <div class="w-20 h-1 bg-green-600 mx-auto mt-4"></div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6">Holistic Healing Through Ayurveda</h3>
+                    <p class="text-gray-700 mb-6">Panchakarma is a cornerstone of Ayurvedic medicine, offering deep cleansing and rejuvenation for the body and mind. Our clinic integrates these ancient therapies with modern medical knowledge to provide comprehensive wellness solutions.</p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start">
+                            <i class="fas fa-spa text-green-600 mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold">Detoxification</div>
+                                <div class="text-gray-600">Eliminate toxins from your body through specialized cleansing procedures.</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-heartbeat text-green-600 mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold">Rejuvenation</div>
+                                <div class="text-gray-600">Restore balance and vitality to your physiological systems.</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-brain text-green-600 mt-1 mr-3"></i>
+                            <div>
+                                <div class="font-semibold">Mental Clarity</div>
+                                <div class="text-gray-600">Achieve mental peace and clarity through specialized treatments.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#booking" class="btn-secondary text-white px-6 py-3 rounded-lg font-semibold inline-flex items-center">
+                        <i class="fas fa-calendar-plus mr-2"></i> Book Panchakarma Consultation
+                    </a>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4">
+                            <i class="fas fa-oil-can"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">Abhyanga</h4>
+                        <p class="text-sm text-gray-600">Therapeutic oil massage for relaxation and detoxification.</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">Basti</h4>
+                        <p class="text-sm text-gray-600">Medicated enema therapy for cleansing and rejuvenation.</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">Nasya</h4>
+                        <p class="text-sm text-gray-600">Nasal administration of medicated oils for respiratory health.</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">Virechana</h4>
+                        <p class="text-sm text-gray-600">Purgation therapy for internal cleansing and balance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Patient Testimonials</h2>
+                <p class="text-gray-600">Hear from our satisfied patients about their experience at AAYUSH Surgical Clinic.</p>
+                <div class="w-20 h-1 bg-blue-600 mx-auto mt-4"></div>
+            </div>
+            
+            <div class="swiper testimonialSwiper rounded-xl">
+                <div class="swiper-wrapper">
+                    <!-- Testimonial 1 -->
+                    <div class="swiper-slide">
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-6">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                                     alt="Patient" class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <div class="font-bold text-lg">Rahul Sharma</div>
+                                    <div class="text-yellow-500">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">"Dr. Dahatonde's laser treatment for my piles was virtually painless. The recovery was quick, and the staff was very supportive throughout the process. Highly recommended!"</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 2 -->
+                    <div class="swiper-slide">
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-6">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                                     alt="Patient" class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <div class="font-bold text-lg">Priya Patel</div>
+                                    <div class="text-yellow-500">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">"I had been suffering from fissures for years. After treatment at AAYUSH Clinic, I finally found relief. Dr. Dahatonde explained everything clearly and made me feel comfortable."</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 3 -->
+                    <div class="swiper-slide">
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-6">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" 
+                                     alt="Patient" class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <div class="font-bold text-lg">Anil Kumar</div>
+                                    <div class="text-yellow-500">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">"The Panchakarma therapy at AAYUSH Clinic transformed my health. I feel rejuvenated and more energetic than I have in years. Thank you, Dr. Dahatonde!"</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-3xl font-bold mb-4">Book Your Appointment</h3>
+                    <p class="text-gray-600 mb-6">Schedule your consultation with Dr. Shriram Dahatonde. Choose a date and available time slot for your visit.</p>
+                    
+                    <div class="bg-blue-50 p-6 rounded-xl mb-6">
+                        <h4 class="font-semibold text-lg mb-2">Clinic Information</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-clock text-blue-600 mt-1 mr-3"></i>
+                                <div>
+                                    <div class="font-medium">Timings</div>
+                                    <div class="text-gray-600">Monday - Saturday: 9:00 AM - 2:00 PM & 5:00 PM - 10:00 PM</div>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-map-marker-alt text-blue-600 mt-1 mr-3"></i>
+                                <div>
+                                    <div class="font-medium">Address</div>
+                                    <div class="text-gray-600">Manikpur Chowk, Near Manickpur Talao, Manickpur, Vasai West - 401202</div>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-phone-alt text-blue-600 mt-1 mr-3"></i>
+                                <div>
+                                    <div class="font-medium">Phone</div>
+                                    <div class="text-gray-600">+91 99609 95809</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <h4 class="font-semibold text-lg mb-2">Emergency Care</h4>
+                        <p class="text-gray-600 mb-4">For urgent medical concerns outside clinic hours, please call directly for assistance.</p>
+                        <a href="tel:+919960995809" class="inline-flex items-center bg-green-600 text-white px-4 py-2 rounded-lg font-medium">
+                            <i class="fas fa-phone-alt mr-2"></i> Emergency Call
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg">
+                    <form id="booking-form" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input id="name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                <input id="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                <input id="phone" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Service Required</label>
+                            <select id="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Select a service</option>
+                                <option value="Piles Treatment">Piles (Hemorrhoids) Treatment</option>
+                                <option value="Fissures & Fistulas">Fissures & Fistulas Treatment</option>
+                                <option value="Pilonidal Sinus">Pilonidal Sinus Treatment</option>
+                                <option value="Laser Surgery">Laser Surgery</option>
+                                <option value="Minimally Invasive Surgery">Minimally Invasive Surgery</option>
+                                <option value="Panchakarma Consultation">Panchakarma Consultation</option>
+                                <option value="General Consultation">General Consultation</option>
+                            </select>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Date</label>
+                                <input id="date" type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Available Time Slots</label>
+                                <div id="slots-grid" class="grid grid-cols-2 gap-2 mt-2"></div>
+                                <div id="slots-hint" class="text-sm mt-2"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
+                            <textarea id="message" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Any specific concerns or questions..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                            <i class="fas fa-paper-plane mr-2"></i> Book Appointment
+                        </button>
+                        
+                        <div id="booking-feedback" class="text-sm mt-2 text-center"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="font-bold text-lg mb-4">AAYUSH Surgical Clinic</h4>
+                    <p class="text-gray-300 mb-4">Expert surgical care combined with traditional Panchakarma therapies for holistic healing.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-white transition">Home</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-white transition">About Dr. Dahatonde</a></li>
+                        <li><a href="#services" class="text-gray-300 hover:text-white transition">Our Services</a></li>
+                        <li><a href="#panchakarma" class="text-gray-300 hover:text-white transition">Panchakarma</a></li>
+                        <li><a href="#booking" class="text-gray-300 hover:text-white transition">Book Appointment</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Our Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Piles Treatment</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Fissures & Fistulas</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Pilonidal Sinus</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Laser Surgery</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Panchakarma</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact Info</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-400"></i>
+                            <span class="text-gray-300">Manikpur Chowk, Near Manickpur Talao, Manickpur, Vasai West - 401202</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3 text-blue-400"></i>
+                            <span class="text-gray-300">+91 99609 95809</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-blue-400"></i>
+                            <span class="text-gray-300">shriramdahatonde@gmail.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-clock mt-1 mr-3 text-blue-400"></i>
+                            <span class="text-gray-300">Mon-Sat: 9am-2pm & 5pm-10pm</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; <span id="year"></span> AAYUSH Surgical Clinic. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        // Initialize testimonial swiper
+        var testimonialSwiper = new Swiper('.testimonialSwiper', {
+            loop: true,
+            spaceBetween: 30,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 1,
+                },
+                768: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                },
+            }
+        });
+        
+        // Slot booking functionality
+        function setSlotsMessage(msg, color = '#b91c1c') {
+            const el = document.getElementById('slots-hint');
+            el.style.color = color;
+            el.textContent = msg;
+        }
+        
+        async function loadSlotsForDate(dateStr) {
+            const grid = document.getElementById('slots-grid');
+            grid.innerHTML = '';
+            setSlotsMessage('');
+            
+            if (!dateStr) {
+                setSlotsMessage('Please choose a date');
+                return;
+            }
+            
+            // Mock slots data - in a real app, this would come from an API
+            const morningSlots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30'];
+            const eveningSlots = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00'];
+            
+            // Randomly mark some slots as taken for demo purposes
+            const takenSlots = [];
+            if (Math.random() > 0.7) takenSlots.push(morningSlots[Math.floor(Math.random() * morningSlots.length)]);
+            if (Math.random() > 0.7) takenSlots.push(eveningSlots[Math.floor(Math.random() * eveningSlots.length)]);
+            
+            const allSlots = [...morningSlots, ...eveningSlots];
+            
+            allSlots.forEach(slot => {
+                const isTaken = takenSlots.includes(slot);
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `slot py-2 px-2 bg-white border rounded-md text-sm ${isTaken ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-50'}`;
+                btn.textContent = slot;
+                btn.disabled = isTaken;
+                
+                if (!isTaken) {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.slot').forEach(s => s.classList.remove('border-blue-500', 'text-blue-600', 'bg-blue-50'));
+                        btn.classList.add('border-blue-500', 'text-blue-600', 'bg-blue-50');
+                        grid.dataset.selected = slot;
+                        setSlotsMessage('Selected: ' + slot, '#065f46');
+                    });
+                }
+                
+                grid.appendChild(btn);
+            });
+        }
+        
+        document.getElementById('date').addEventListener('change', e => loadSlotsForDate(e.target.value));
+        
+        // Form submission
+        document.getElementById('booking-form').addEventListener('submit', async (ev) => {
+            ev.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const service = document.getElementById('service').value;
+            const date = document.getElementById('date').value;
+            const notes = document.getElementById('message').value.trim();
+            const selectedSlot = document.getElementById('slots-grid').dataset.selected;
+            
+            const feedback = document.getElementById('booking-feedback');
+            feedback.textContent = '';
+            feedback.style.color = '#065f46';
+            
+            if (!name || (!email && !phone) || !date || !selectedSlot) {
+                feedback.textContent = 'Please provide name, email/phone, date and select a time slot.';
+                feedback.style.color = '#b91c1c';
+                return;
+            }
+            
+            // Simulate API call
+            feedback.textContent = 'Booking your appointment...';
+            
+            setTimeout(() => {
+                feedback.textContent = 'Appointment booked successfully! We will contact you shortly to confirm.';
+                feedback.style.color = '#065f46';
+                
+                // Reset form
+                document.getElementById('booking-form').reset();
+                document.getElementById('slots-grid').innerHTML = '';
+                delete document.getElementById('slots-grid').dataset.selected;
+                setSlotsMessage('');
+                
+                // Show success message
+                alert('Thank you! Your appointment request has been submitted. We will contact you shortly to confirm.');
+            }, 1500);
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

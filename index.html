@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AAYUSH Surgical Clinic - Dr. Shriram Dahatonde</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <!-- Fonts + Icons -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #0ea5e9;
+      --primary-dark: #0284c7;
+      --secondary: #10b981;
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.5);
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, Arial, sans-serif;
+      scroll-behavior: smooth;
+      background-color: #f8fafc;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* 3D Container */
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      /* Let clicks pass through */
+    }
+
+    /* Glassmorphism */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+      border-color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Navbar Glass */
+    .nav-glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .nav-link {
+      position: relative;
+      transition: all .3s;
+    }
+
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background: var(--primary);
+      transition: width .3s;
+    }
+
+    .nav-link:hover:after {
+      width: 100%;
+    }
+
+    .service-icon {
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      font-size: 28px;
+      transition: transform 0.3s ease;
+    }
+
+    .glass-card:hover .service-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Hero Gradient moved to be an overlay or fallback */
+    .hero-gradient {
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      position: relative;
+    }
+
+    /* --- Advanced Icon Styles --- */
+    /* Keyframes for floating animation */
+    @keyframes float-icon {
+      0% {
+        transform: translateY(0px) scale(1);
+      }
+
+      50% {
+        transform: translateY(-8px) scale(1.05);
+      }
+
+      100% {
+        transform: translateY(0px) scale(1);
+      }
+    }
+
+    /* Container for the icon */
+    .service-icon {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      font-size: 36px;
+      /* Glassy background for the circle */
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* The FontAwesome Icon itself */
+    .service-icon i {
+      background: -webkit-linear-gradient(45deg, #0284c7, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 6px rgba(14, 165, 233, 0.3));
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    /* Hover effects on the card trigger icon changes */
+    .glass-card:hover .service-icon {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.4), inset 0 0 10px rgba(14, 165, 233, 0.1);
+      border-color: #0ea5e9;
+    }
+
+    .glass-card:hover .service-icon i {
+      animation: float-icon 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.8));
+    }
+
+    /* --- Gallery Marquee --- */
+    .gallerySwiper {
+      width: 100%;
+      padding-bottom: 20px;
+    }
+
+    .gallerySwiper .swiper-wrapper {
+      transition-timing-function: linear;
+      /* Constant speed */
+    }
+
+    .gallery-slide {
+      width: 300px;
+      /* Fixed width for better flow */
+      height: 200px;
+      overflow: hidden;
+      border-radius: 12px;
+      margin-right: 20px;
+      /* space between slides */
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    .gallery-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-slide:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+
+    .gallery-slide:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    /* Lightbox */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    #lightbox.active img {
+      transform: scale(1);
+    }
+
+    #lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 3rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* Animations */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Fix for 3D overlay */
+    section#home {
+      position: relative;
+      background: transparent;
+      /* Changed from gradient to transparent for 3D visibility */
+      overflow: hidden;
+    }
+
+    /* Gradient overlay for text readability if needed */
+    .hero-bg-fallback {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.9) 0%, rgba(2, 132, 199, 0.8) 100%);
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- NAV -->
+  <nav class="nav-glass fixed w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-20 items-center">
+        <div class="flex items-center">
+          <div class="h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl">
+            <i class="fas fa-stethoscope"></i>
+          </div>
+          <div class="ml-4">
+            <div class="text-xl font-bold text-gray-900">AAYUSH Surgical Clinic</div>
+            <div class="text-sm text-gray-600">Dr. Shriram T. Dahatonde</div>
+          </div>
+        </div>
+
+        <div class="hidden md:flex md:space-x-8 items-center">
+          <a href="#home" class="nav-link text-gray-900 font-medium">Home</a>
+          <a href="#about" class="nav-link text-gray-600 font-medium">About</a>
+          <a href="#services" class="nav-link text-gray-600 font-medium">Services</a>
+          <a href="#panchakarma" class="nav-link text-gray-600 font-medium">Panchakarma</a>
+          <a href="#testimonials" class="nav-link text-gray-600 font-medium">Testimonials</a>
+          <a href="#booking" class="nav-link text-gray-600 font-medium">Book Appointment</a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <a href="/admin.html"
+            class="hidden md:inline-flex items-center bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+            <i class="fas fa-user-shield mr-2"></i> Admin
+          </a>
+          <a href="tel:+919960995809"
+            class="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">
+            <i class="fas fa-phone-alt mr-2"></i> Call Now
+          </a>
+          <button id="mobile-toggle" class="md:hidden ml-2 p-2"><i class="fas fa-bars"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+      <div class="px-4 py-3 space-y-1">
+        <a href="#home" class="block text-gray-800 py-2">Home</a>
+        <a href="#about" class="block text-gray-800 py-2">About</a>
+        <a href="#services" class="block text-gray-800 py-2">Services</a>
+        <a href="#panchakarma" class="block text-gray-800 py-2">Panchakarma</a>
+        <a href="#testimonials" class="block text-gray-800 py-2">Testimonials</a>
+        <a href="#booking" class="block text-gray-800 py-2">Book Appointment</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="pt-24 text-white relative">
+    <div id="canvas-container"></div>
+    <div class="hero-bg-fallback"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">Expert Surgical & Panchakarma Care</h1>
+          <p class="text-xl mb-8 opacity-90">Dr. Shriram T. Dahatonde - MS (General Surgery AYU.), Consultant
+            Proctologist & Anorectal Surgeon</p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#booking"
+              class="bg-white text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold text-center shadow-lg">
+              <i class="fas fa-calendar-check mr-2"></i> Book Appointment
+            </a>
+            <a href="#services"
+              class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold text-center shadow-lg hover:bg-blue-700 transition">
+              <i class="fas fa-procedures mr-2"></i> Our Services
+            </a>
+          </div>
+          <div class="mt-8 flex items-center">
+            <div class="mr-6">
+              <div class="text-2xl font-bold">15+</div>
+              <div class="text-sm opacity-80">Years Experience</div>
+            </div>
+            <div class="mr-6">
+              <div class="text-2xl font-bold">5000+</div>
+              <div class="text-sm opacity-80">Happy Patients</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold">98%</div>
+              <div class="text-sm opacity-80">Success Rate</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative">
+          <img src="homepage copy.png" alt="Doctor" class="rounded-xl shadow-2xl w-full h-96 object-cover">
+          <div class="absolute -bottom-6 -left-6 bg-white text-gray-800 p-4 rounded-xl shadow-lg">
+            <div class="font-bold">Clinic Timings</div>
+            <div class="text-sm">Mon-Sat: 9am-2pm & 5pm-10pm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">About Dr. Shriram T. Dahatonde</h2>
+        <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div><img src="surgeon copy.png" alt="Doctor with patient"
+            class="rounded-xl shadow-lg w-full h-96 object-cover"></div>
+        <div>
+          <h3 class="text-2xl font-semibold mb-4">MS (General Surgery AYU.), Consultant Proctologist & Anorectal Surgeon
+          </h3>
+          <p class="text-gray-700 mb-6">With over 15 years of experience, Dr. Shriram T. Dahatonde specializes in
+            advanced surgical treatments with a focus on proctology and anorectal conditions. His expertise combines
+            modern surgical techniques with traditional Ayurvedic principles for comprehensive patient care.</p>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <i class="fas fa-graduation-cap text-blue-600 mt-1 mr-3"></i>
+              <div>
+                <div class="font-semibold">Medical Education</div>
+                <div class="text-gray-600">MS in General Surgery (AYU.) with specialization in Proctology</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <i class="fas fa-award text-blue-600 mt-1 mr-3"></i>
+              <div>
+                <div class="font-semibold">Specializations</div>
+                <div class="text-gray-600">Piles, Fissures, Fistulas, Pilonidal Sinus, Laser & Minimally Invasive
+                  Surgery</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <i class="fas fa-map-marker-alt text-blue-600 mt-1 mr-3"></i>
+              <div>
+                <div class="font-semibold">Clinic Location</div>
+                <div class="text-gray-600">Manikpur Chowk, Near Manickpur Talao, Manickpur, Vasai West - 401202</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8">
+            <a href="tel:+919960995809"
+              class="inline-flex items-center bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition mr-4"><i
+                class="fas fa-phone-alt mr-2"></i> +91 99609 95809</a>
+            <a href="mailto:shriramdahatonde@gmail.com"
+              class="inline-flex items-center bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition"><i
+                class="fas fa-envelope mr-2"></i> Email Us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="py-16 gradient-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Specialized Services</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">We offer comprehensive surgical treatments with a focus on minimally
+          invasive techniques for faster recovery and better outcomes.</p>
+        <div class="w-20 h-1 bg-blue-600 mx-auto mt-4"></div>
+      </div>
+
+      <!-- dynamic services list -->
+      <div id="services-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </div>
+  </section>
+
+  <!-- PANCHAKARMA -->
+  <section id="panchakarma" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Panchakarma Therapies</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">Traditional Ayurvedic detoxification and rejuvenation therapies for
+          holistic wellness.</p>
+        <div class="w-20 h-1 bg-green-600 mx-auto mt-4"></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h3 class="text-2xl font-semibold mb-6">Holistic Healing Through Ayurveda</h3>
+          <p class="text-gray-700 mb-6">Panchakarma is a cornerstone of Ayurvedic medicine, offering deep cleansing and
+            rejuvenation for the body and mind. Our clinic integrates these ancient therapies with modern medical
+            knowledge to provide comprehensive wellness solutions.</p>
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start"><i class="fas fa-spa text-green-600 mt-1 mr-3"></i>
+              <div>
+                <div class="font-semibold">Detoxification</div>
+                <div class="text-gray-600">Eliminate toxins via specialized cleansing.</div>
+              </div>
+            </div>
+            <div class="flex items-start"><i class="fas fa-heartbeat text-green-600 mt-1 mr-3"></i>
+              <div>
+                <div class="font-semibold">Rejuvenation</div>
+                <div class="text-gray-600">Restore balance & vitality.</div>
+              </div>
+            </div>
+            <div class="flex items-start"><i class="fas fa-brain text-green-600 mt-1 mr-3"></i>
+              <div>
+                <div class="font-semibold">Mental Clarity</div>
+                <div class="text-gray-600">Achieve mental peace through specialized treatments.</div>
+              </div>
+            </div>
+          </div>
+          <a href="#booking"
+            class="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-lg font-semibold"><i
+              class="fas fa-calendar-plus mr-2"></i> Book Panchakarma Consultation</a>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-green-50 p-6 rounded-xl">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4"><i
+                class="fas fa-oil-can"></i></div>
+            <h4 class="font-semibold mb-2">Abhyanga</h4>
+            <p class="text-sm text-gray-600">Therapeutic oil massage for relaxation and detoxification.</p>
+          </div>
+          <div class="bg-green-50 p-6 rounded-xl">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4"><i
+                class="fas fa-water"></i></div>
+            <h4 class="font-semibold mb-2">Basti</h4>
+            <p class="text-sm text-gray-600">Medicated enema therapy for cleansing and rejuvenation.</p>
+          </div>
+          <div class="bg-green-50 p-6 rounded-xl">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4"><i
+                class="fas fa-wind"></i></div>
+            <h4 class="font-semibold mb-2">Nasya</h4>
+            <p class="text-sm text-gray-600">Nasal administration of medicated oils for respiratory health.</p>
+          </div>
+          <div class="bg-green-50 p-6 rounded-xl">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-4"><i
+                class="fas fa-fire"></i></div>
+            <h4 class="font-semibold mb-2">Virechana</h4>
+            <p class="text-sm text-gray-600">Purgation therapy for internal cleansing and balance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOGS -->
+  <section id="blogs" class="py-16 bg-white/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Blog</h2>
+        <p class="text-gray-600">Latest articles & patient information</p>
+      </div>
+
+      <div id="blogs-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="py-16 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Clinic Gallery</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">A glimpse into our state-of-the-art facilities and patient care
+          environment.</p>
+        <div class="w-20 h-1 bg-blue-600 mx-auto mt-4"></div>
+      </div>
+
+      <!-- Marquee Gallery -->
+      <div class="swiper gallerySwiper">
+        <div class="swiper-wrapper">
+          <!-- Slide 1 -->
+          <div class="swiper-slide gallery-slide" onclick="openLightbox(this)">
+            <img src="https://images.unsplash.com/photo-1519494026892-80ba43555332?auto=format&fit=crop&w=800&q=80"
+              alt="Advanced OT">
+            <div class="gallery-overlay">
+              <div class="text-white">
+                <h4 class="font-bold text-lg">Modern OT</h4>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="swiper-slide gallery-slide" onclick="openLightbox(this)">
+            <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80"
+              alt="Consultation">
+            <div class="gallery-overlay">
+              <div class="text-white">
+                <h4 class="font-bold text-lg">Consultation</h4>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="swiper-slide gallery-slide" onclick="openLightbox(this)">
+            <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80"
+              alt="Panchakarma">
+            <div class="gallery-overlay">
+              <div class="text-white">
+                <h4 class="font-bold text-lg">Panchakarma</h4>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 4 -->
+          <div class="swiper-slide gallery-slide" onclick="openLightbox(this)">
+            <img src="https://images.unsplash.com/photo-1516549655169-df83a0929519?auto=format&fit=crop&w=800&q=80"
+              alt="Waiting Area">
+            <div class="gallery-overlay">
+              <div class="text-white">
+                <h4 class="font-bold text-lg">Waiting Area</h4>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 5 -->
+          <div class="swiper-slide gallery-slide" onclick="openLightbox(this)">
+            <img src="https://images.unsplash.com/photo-1581056771107-24ca5f02506d?auto=format&fit=crop&w=800&q=80"
+              alt="Laboratory">
+            <div class="gallery-overlay">
+              <div class="text-white">
+                <h4 class="font-bold text-lg">Diagnostics</h4>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 6 -->
+          <div class="swiper-slide gallery-slide" onclick="openLightbox(this)">
+            <img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=800&q=80"
+              alt="Recovery">
+            <div class="gallery-overlay">
+              <div class="text-white">
+                <h4 class="font-bold text-lg">Recovery</h4>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 7 -->
+          <div class="swiper-slide gallery-slide" onclick="openLightbox(this)">
+            <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=800&q=80"
+              alt="Ayurveda Center">
+            <div class="gallery-overlay">
+              <div class="text-white">
+                <h4 class="font-bold text-lg">Ayurveda</h4>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 8 -->
+          <div class="swiper-slide gallery-slide" onclick="openLightbox(this)">
+            <img src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&w=800&q=80"
+              alt="Laser Treatment">
+            <div class="gallery-overlay">
+              <div class="text-white">
+                <h4 class="font-bold text-lg">Laser Care</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox DOM -->
+  <div id="lightbox" onclick="closeLightbox()">
+    <span id="lightbox-close">&times;</span>
+    <img id="lightbox-img" src="" alt="Full screen view">
+  </div>
+
+  <!-- TESTIMONIALS (Swiper) -->
+  <section id="testimonials" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Patient Testimonials</h2>
+        <p class="text-gray-600">Hear from our satisfied patients</p>
+      </div>
+
+      <div class="swiper testimonialSwiper rounded-xl">
+        <div class="swiper-wrapper" id="testimonials-list">
+          <!-- popluated dynamically -->
+        </div>
+        <div class="swiper-pagination mt-6"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="booking" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-3xl font-bold mb-4">Book Your Appointment</h3>
+          <p class="text-gray-600 mb-6">Schedule your consultation with Dr. Shriram Dahatonde. Choose a date and
+            available time slot for your visit.</p>
+
+          <div class="bg-blue-50 p-6 rounded-xl mb-6">
+            <h4 class="font-semibold text-lg mb-2">Clinic Information</h4>
+            <ul class="space-y-2 text-gray-700">
+              <li><i class="fas fa-clock text-blue-600 mr-2"></i> Monday - Saturday: 9:00 AM - 2:00 PM & 5:00 PM - 10:00
+                PM</li>
+              <li><i class="fas fa-map-marker-alt text-blue-600 mr-2"></i> Manikpur Chowk, Near Manickpur Talao, Vasai
+                West - 401202</li>
+              <li><i class="fas fa-phone-alt text-blue-600 mr-2"></i> +91 99609 95809</li>
+            </ul>
+          </div>
+
+          <div class="bg-green-50 p-6 rounded-xl">
+            <h4 class="font-semibold text-lg mb-2">Emergency Care</h4>
+            <p class="text-gray-600 mb-4">For urgent medical concerns outside clinic hours, please call directly for
+              assistance.</p>
+            <a href="tel:+919960995809"
+              class="inline-flex items-center bg-green-600 text-white px-4 py-2 rounded-lg font-medium"><i
+                class="fas fa-phone-alt mr-2"></i> Emergency Call</a>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 p-8 rounded-xl shadow-lg">
+          <form id="booking-form" class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+              <input id="name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg" required>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <input id="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <input id="phone" type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-lg" required>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Service Required</label>
+              <select id="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                <option value="">Select a service</option>
+                <option value="Piles Treatment">Piles (Hemorrhoids) Treatment</option>
+                <option value="Fissures & Fistulas">Fissures & Fistulas Treatment</option>
+                <option value="Pilonidal Sinus">Pilonidal Sinus Treatment</option>
+                <option value="Laser Surgery">Laser Surgery</option>
+                <option value="Minimally Invasive Surgery">Minimally Invasive Surgery</option>
+                <option value="Panchakarma Consultation">Panchakarma Consultation</option>
+                <option value="General Consultation">General Consultation</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Date</label>
+                <input id="date" type="date" min="" class="w-full px-4 py-3 border border-gray-300 rounded-lg" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Available Time Slots</label>
+                <div id="slots-grid" class="grid grid-cols-2 gap-2 mt-2"></div>
+                <div id="slots-hint" class="text-sm mt-2"></div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
+              <textarea id="message" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                placeholder="Any specific concerns or questions..."></textarea>
+            </div>
+
+            <button type="submit"
+              class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+              <i class="fas fa-paper-plane mr-2"></i> Book Appointment
+            </button>
+
+            <div id="booking-feedback" class="text-sm mt-2 text-center"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h4 class="font-bold text-lg mb-4">AAYUSH Surgical Clinic</h4>
+          <p class="text-gray-300 mb-4">Expert surgical care combined with traditional Panchakarma therapies for
+            holistic healing.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="#home" class="text-gray-300 hover:text-white">Home</a></li>
+            <li><a href="#about" class="text-gray-300 hover:text-white">About Dr. Dahatonde</a></li>
+            <li><a href="#services" class="text-gray-300 hover:text-white">Our Services</a></li>
+            <li><a href="#panchakarma" class="text-gray-300 hover:text-white">Panchakarma</a></li>
+            <li><a href="#booking" class="text-gray-300 hover:text-white">Book Appointment</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-lg mb-4">Our Services</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-300 hover:text-white">Piles Treatment</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Fissures & Fistulas</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Pilonidal Sinus</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Laser Surgery</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Panchakarma</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-lg mb-4">Contact Info</h4>
+          <ul class="space-y-3">
+            <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-400"></i><span
+                class="text-gray-300">Manikpur Chowk, Near Manickpur Talao, Manickpur, Vasai West - 401202</span></li>
+            <li class="flex items-start"><i class="fas fa-phone-alt mt-1 mr-3 text-blue-400"></i><span
+                class="text-gray-300">+91 99609 95809</span></li>
+            <li class="flex items-start"><i class="fas fa-envelope mt-1 mr-3 text-blue-400"></i><span
+                class="text-gray-300">shriramdahatonde@gmail.com</span></li>
+            <li class="flex items-start"><i class="fas fa-clock mt-1 mr-3 text-blue-400"></i><span
+                class="text-gray-300">Mon-Sat: 9am-2pm & 5pm-10pm</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; <span id="year"></span> Shubham Dahatonde. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    // set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // mobile menu toggle
+    document.getElementById('mobile-toggle').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // ---------- API helpers ----------
+    async function apiGet(path) {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error('API error ' + res.status);
+      return res.json();
+    }
+    async function apiPost(path, body) {
+      const res = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'server error');
+      return data;
+    }
+
+    // ---------- Load dynamic content ----------
+    function escapeHtml(s) { if (!s) return ''; return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
+
+    async function loadServices() {
+      try {
+        let services = await apiGet('/api/services');
+        if (!services || !services.length) {
+          services = [
+            { title: 'Piles Treatment', description: 'Advanced hemorrhoid care', icon: 'fas fa-procedures' },
+            { title: 'Fissures & Fistulas', description: 'Modern surgical solutions', icon: 'fas fa-cut' },
+            { title: 'Panchakarma', description: 'Ayurvedic therapies', icon: 'fas fa-spa' }
+          ];
+        }
+        const container = document.getElementById('services-list');
+        container.innerHTML = '';
+        services.forEach(s => {
+          const el = document.createElement('div');
+          el.className = 'glass-card rounded-xl p-6 fade-up';
+          el.innerHTML = `
+            <div class="service-icon bg-blue-50 text-blue-600 mb-4"><i class="${s.icon || 'fas fa-stethoscope'}"></i></div>
+            <h3 class="text-xl font-bold">${escapeHtml(s.title)}</h3>
+            <p class="text-gray-600 mt-2">${escapeHtml(s.description || '')}</p>
+          `;
+          container.appendChild(el);
+        });
+      } catch (e) { console.warn('loadServices', e); }
+    }
+
+    async function loadBlogs() {
+      try {
+        const blogs = await apiGet('/api/blogs');
+        const container = document.getElementById('blogs-list');
+        container.innerHTML = '';
+        if (!blogs || !blogs.length) { container.innerHTML = '<div class="text-gray-500">No blogs yet.</div>'; return; }
+        blogs.forEach(b => {
+          const card = document.createElement('article');
+          card.className = 'glass-card p-6 rounded-lg fade-up';
+          const excerpt = (b.summary && b.summary.length) ? b.summary : (b.content || '').slice(0, 200);
+          const needsToggle = (b.content && b.content.length > 220);
+          card.innerHTML = `
+            <img src="${b.image || 'https://images.unsplash.com/photo-1584438784890-7c3d3bd38962?auto=format&fit=crop&w=1200&q=80'}" class="w-full h-40 object-cover rounded mb-4">
+            <h3 class="font-semibold text-xl mb-2">${escapeHtml(b.title)}</h3>
+            <p class="text-gray-600 content-snippet">${escapeHtml(excerpt)}</p>
+            ${needsToggle ? `<button class="mt-3 read-more text-blue-600 font-medium">Read more</button>
+                            <div class="full-content mt-3 hidden text-gray-700">${escapeHtml(b.content)}</div>` : ''}
+          `;
+          container.appendChild(card);
+        });
+        document.querySelectorAll('.read-more').forEach(btn => {
+          btn.addEventListener('click', (ev) => {
+            const card = ev.target.closest('article');
+            const full = card.querySelector('.full-content');
+            if (full.classList.contains('hidden')) { full.classList.remove('hidden'); ev.target.textContent = 'Show less'; }
+            else { full.classList.add('hidden'); ev.target.textContent = 'Read more'; }
+          });
+        });
+      } catch (e) { console.warn('loadBlogs', e); }
+    }
+
+    async function loadTestimonials() {
+      try {
+        const tests = await apiGet('/api/testimonials');
+        const wrapper = document.getElementById('testimonials-list');
+        wrapper.innerHTML = '';
+        if (!tests || !tests.length) {
+          wrapper.innerHTML = `<div class="swiper-slide"><div class="glass-card p-8 rounded-xl">No testimonials yet.</div></div>`;
+          return;
+        }
+        tests.forEach(t => {
+          const short = (t.text || '').slice(0, 160);
+          const needsToggle = (t.text && t.text.length > 160);
+          const slide = document.createElement('div');
+          slide.className = 'swiper-slide';
+          slide.innerHTML = `
+            <div class="glass-card p-8 rounded-xl h-full flex flex-col justify-between">
+              <div class="flex items-center mb-6">
+                <img src="${t.image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80'}" class="w-16 h-16 rounded-full object-cover mr-4">
+                <div>
+                  <div class="font-bold text-lg">${escapeHtml(t.name || 'Anonymous')}</div>
+                  <div class="text-yellow-500">${'★'.repeat(t.rating || 5)}</div>
+                </div>
+              </div>
+              <p class="text-gray-700 italic snippet">${escapeHtml(short)}</p>
+              ${needsToggle ? `<div class="mt-auto pt-4"><button class="test-read-more text-blue-600">Read more</button>
+                              <div class="full-test hidden mt-2 text-gray-700">${escapeHtml(t.text)}</div></div>` : ''}
+            </div>
+          `;
+          wrapper.appendChild(slide);
+        });
+        // attach read more events after DOM appended
+        setTimeout(() => {
+          document.querySelectorAll('.test-read-more').forEach(btn => btn.addEventListener('click', (ev) => {
+            const box = ev.target.closest('.swiper-slide');
+            const full = box.querySelector('.full-test');
+            if (full.classList.contains('hidden')) { full.classList.remove('hidden'); ev.target.textContent = 'Show less'; }
+            else { full.classList.add('hidden'); ev.target.textContent = 'Read more'; }
+          }));
+          initSwiper();
+        }, 100);
+      } catch (e) { console.warn('loadTestimonials', e); }
+    }
+
+    // ---------- Slots & booking ----------
+    function setSlotsMessage(msg, color = '#b91c1c') {
+      const el = document.getElementById('slots-hint');
+      if (!el) return;
+      el.style.color = color;
+      el.textContent = msg;
+    }
+
+    async function loadSlotsForDate(dateStr) {
+      const grid = document.getElementById('slots-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      setSlotsMessage('');
+
+      if (!dateStr) {
+        setSlotsMessage('Please choose a date');
+        return;
+      }
+
+      try {
+        // fetch slots from backend — backend now returns [{slot, taken, expired}]
+        const resp = await fetch('/api/slots?date=' + encodeURIComponent(dateStr));
+        if (!resp.ok) {
+          setSlotsMessage('Failed to load slots');
+          return;
+        }
+        const slots = await resp.json();
+
+        if (!slots.length) {
+          setSlotsMessage('No slots for this date');
+          return;
+        }
+
+        slots.forEach(s => {
+          const isTaken = !!s.taken;
+          const isExpired = !!s.expired; // new flag from backend
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          // mark visually disabled for taken or expired
+          const disabledClass = (isTaken || isExpired) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-50';
+          btn.className = `slot py-2 px-2 bg-white border rounded-md text-sm ${disabledClass}`;
+          btn.textContent = s.slot;
+
+          if (isTaken) {
+            btn.disabled = true;
+            btn.title = 'Already booked';
+          } else if (isExpired) {
+            btn.disabled = true;
+            btn.title = 'Past time (today)';
+          } else {
+            btn.addEventListener('click', () => {
+              // unselect others
+              document.querySelectorAll('#slots-grid .slot').forEach(x => x.classList.remove('border-blue-500', 'text-blue-600', 'bg-blue-50'));
+              btn.classList.add('border-blue-500', 'text-blue-600', 'bg-blue-50');
+              grid.dataset.selected = s.slot;
+              setSlotsMessage('Selected: ' + s.slot, '#065f46');
+            });
+          }
+
+          grid.appendChild(btn);
+        });
+      } catch (err) {
+        console.warn('loadSlotsForDate', err);
+        setSlotsMessage('Failed to load slots');
+      }
+    }
+
+    // booking submit
+    document.getElementById('date').addEventListener('change', e => loadSlotsForDate(e.target.value));
+
+    document.getElementById('booking-form').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const service = document.getElementById('service').value;
+      const date = document.getElementById('date').value;
+      const notes = document.getElementById('message').value.trim();
+      const selectedSlot = document.getElementById('slots-grid').dataset.selected;
+
+      const feedback = document.getElementById('booking-feedback');
+      feedback.textContent = '';
+      feedback.style.color = '#065f46';
+
+      if (!name || (!email && !phone) || !date || !selectedSlot) {
+        feedback.textContent = 'Please provide name, email/phone, date and select a time slot.';
+        feedback.style.color = '#b91c1c';
+        return;
+      }
+
+      try {
+        feedback.textContent = 'Booking your appointment...';
+
+        // prefer sending explicit email & phone fields (backend expects these now)
+        const payload = {
+          name,
+          email: email || undefined,
+          phone: phone || undefined,
+          contact: email || phone, // legacy field for backwards compatibility
+          dateISO: date,
+          slot: selectedSlot,
+          service,
+          notes
+        };
+
+        const res = await fetch('/api/book', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          feedback.textContent = data.error || 'Booking failed';
+          feedback.style.color = '#b91c1c';
+          return;
+        }
+
+        feedback.textContent = 'Appointment booked successfully! We will contact you shortly to confirm.';
+        feedback.style.color = '#065f46';
+
+        // reset form
+        document.getElementById('booking-form').reset();
+        document.getElementById('slots-grid').innerHTML = '';
+        delete document.getElementById('slots-grid').dataset.selected;
+        setSlotsMessage('');
+
+        alert('Thank you! Your appointment request has been submitted. We will contact you shortly to confirm.');
+      } catch (err) {
+        console.error('Booking error', err);
+        feedback.textContent = 'Booking failed — try again.';
+        feedback.style.color = '#b91c1c';
+      }
+    });
+
+    // ---------- Swiper init ----------
+    function initSwiper() {
+      try {
+        if (window.swiperInstance && window.swiperInstance.destroy) window.swiperInstance.destroy(true, true);
+        window.swiperInstance = new Swiper('.testimonialSwiper', {
+          loop: true, spaceBetween: 30,
+          pagination: { el: '.swiper-pagination', clickable: true },
+          autoplay: { delay: 5000, disableOnInteraction: false },
+          breakpoints: { 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+        });
+
+        // Gallery Marquee
+        new Swiper('.gallerySwiper', {
+          slidesPerView: 'auto',
+          spaceBetween: 20,
+          loop: true,
+          speed: 3000, // Slow constant speed
+          autoplay: {
+            delay: 0,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true // Pause when user hovers to view/click
+          },
+          freeMode: true,
+          grabCursor: true
+        });
+      } catch (e) { console.warn('initSwiper', e); }
+    }
+
+    // smooth scroll anchors
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        if (!targetId || targetId === '#') return;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          window.scrollTo({ top: targetElement.offsetTop - 90, behavior: 'smooth' });
+          document.getElementById('mobile-menu')?.classList.add('hidden');
+        }
+      });
+    });
+    // Disable past dates in calendar by default
+    (function () {
+      const dateInput = document.getElementById('date');
+      if (dateInput) {
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        dateInput.setAttribute('min', today);
+      }
+    })();
+
+    // initial loads
+    loadServices();
+    loadBlogs();
+    loadTestimonials();
+
+    // Scroll Animation Observer
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Watch for dynamic elements
+    const mo = new MutationObserver(() => {
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    // Also watch static sections
+    document.querySelectorAll('section').forEach(el => {
+      el.classList.add('fade-up');
+      observer.observe(el);
+    });
+
+    // Lightbox Logic
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    window.openLightbox = function (el) {
+      const img = el.querySelector('img');
+      lightboxImg.src = img.src;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden'; // prevent scrolling
+    };
+
+    window.closeLightbox = function () {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    };
+  </script>
+  <!-- 3D Background Script -->
+  <script src="3d-background.js"></script>
+</body>
+
+</html>
